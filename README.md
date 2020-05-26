@@ -6,7 +6,7 @@ A file directory comparison tool (一个文件夹对比工具)
 查看两个文件夹所有差异的文件，以及每个文件夹的文件数量和文件差数量
 
 
-# 打包
+# 编译
 go build -o gfdf ./main.go
 
 # 查看运行参数
