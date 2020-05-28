@@ -1,7 +1,10 @@
 package common
 
 import (
+	"crypto/md5"
+	"encoding/hex"
 	"fmt"
+	"io"
 	"io/ioutil"
 	"os"
 	"strings"
@@ -9,23 +12,22 @@ import (
 
 var separator = string(os.PathSeparator)
 
-func FindDirFiles(src,base,exclude string) (filelist []string) {
+func FindDirFiles(src, base, exclude string) (filelist []string) {
 	files, _ := ioutil.ReadDir(src)
 	for _, onefile := range files {
 		if onefile.IsDir() {
-			if strings.Contains(exclude,onefile.Name()) {
+			if strings.Contains(exclude, onefile.Name()) {
 				continue
 			}
-			filelist = append(filelist,FindDirFiles(src + separator + onefile.Name(),base,exclude)...)
+			filelist = append(filelist, FindDirFiles(src+separator+onefile.Name(), base, exclude)...)
 		} else {
-			filename := strings.Replace(fmt.Sprintf("%s%s%s", src, separator,onefile.Name()),base,"",-1)
-			filelist = append(filelist,filename)
+			filename := strings.Replace(fmt.Sprintf("%s%s%s", src, separator, onefile.Name()), base, "", -1)
+			filelist = append(filelist, filename)
 			//fmt.Println("src: ",fmt.Sprintf("%s/%s", src, onefile.Name()))
 		}
 	}
 	return
 }
-
 
 //求并集
 func Union(slice1, slice2 []string) []string {
@@ -78,7 +80,6 @@ func Difference(slice1, slice2 []string) []string {
 	return nn
 }
 
-
 //求全差集 slice1+slice2-并集
 func AllDifference(slice1, slice2 []string) []string {
 	m := make(map[string]int)
@@ -88,7 +89,7 @@ func AllDifference(slice1, slice2 []string) []string {
 		m[v]++
 	}
 
-	allslice := append(slice1,slice2...)
+	allslice := append(slice1, slice2...)
 
 	for _, value := range allslice {
 		times, _ := m[value]
@@ -97,4 +98,19 @@ func AllDifference(slice1, slice2 []string) []string {
 		}
 	}
 	return nn
+}
+
+func HashFileMd5(filePath string) (md5Str string, err error) {
+	file, err := os.Open(filePath)
+	if err != nil {
+		return
+	}
+	defer file.Close()
+	hash := md5.New()
+	if _, err = io.Copy(hash, file); err != nil {
+		return
+	}
+	hashInBytes := hash.Sum(nil)[:16]
+	md5Str = hex.EncodeToString(hashInBytes)
+	return
 }
