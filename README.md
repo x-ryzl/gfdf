@@ -1,5 +1,5 @@
 # gfdf
-A file directory comparison tool (一个文件夹对比工具)
+A file tool with golang (一款golang实现的文件工具)
 
 # 功能：
 
