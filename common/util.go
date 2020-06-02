@@ -12,6 +12,7 @@ import (
 
 var separator = string(os.PathSeparator)
 
+//遍历获取获取文件夹下的所有文件
 func FindDirFiles(src, base, exclude string) (filelist []string) {
 	files, _ := ioutil.ReadDir(src)
 	for _, onefile := range files {
@@ -100,6 +101,7 @@ func AllDifference(slice1, slice2 []string) []string {
 	return nn
 }
 
+// 获取文件的md5值
 func HashFileMd5(filePath string) (md5Str string, err error) {
 	file, err := os.Open(filePath)
 	if err != nil {

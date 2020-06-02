@@ -17,8 +17,14 @@ go build -o gfdf ./main.go
   -s 源路径(必填)
         
   -t 目标路径(必填)
+  
+  -c 命令参数(0：文件夹差异 1：md5判断文件)
          
-# 执行命令
-./gfdf -s src -t target -e ext
+# 文件夹差异文件执行命令：
+./gfdf -s src -t target -e ext -c 0
+
+# 根据md5判断文件是否相同命令:
+./gfdf -s src -t target -c 1
+
 
 
